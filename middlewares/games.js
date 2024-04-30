@@ -7,6 +7,9 @@ const findAllGames = async (req, res, next) => {
   // По GET-запросу на эндпоинт /games найдём все игры
   req.gamesArray = await games
     .find({})
+    // По GET-запросу на эндпоинт /games найдём все документы категорий
+    // и с помощью метода populate запросим данные о связанных
+    // категориях и пользователях
     .populate("categories")
     .populate("users");
 

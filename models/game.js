@@ -1,8 +1,13 @@
 const mongoose = require("mongoose");
 
-const category = require("./category");
-//const categoryModel = require("./category");
-const user = require("./user");
+const categorySchema = require("./category");
+const userSchema = require("./user");
+
+// на практикуме указаны именно эти подлючения
+// и ниже по тектсу они должны использоваться.
+//До сих пор не понимаю почему
+//const userModel = require('./user');
+//const categoryModel = require('./category');
 
 const gameSchema = new mongoose.Schema({
   title: {
@@ -35,20 +40,21 @@ const gameSchema = new mongoose.Schema({
   users: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: user,
+      ref: userSchema,
     },
   ],
   // Добавляем поле для списка категорий
   categories: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: category,
+      ref: categorySchema,
     },
   ],
 });
 
+// в место двух строк ниже можно использовать
+// закомментированную ниже запись
 const game = mongoose.model("game", gameSchema);
-
 module.exports = game;
 
 // module.exports = mongoose.model("game", gameSchema);

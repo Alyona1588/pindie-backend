@@ -1,12 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
-const {
-  usersRouter,
-  gamesRouter,
-  categoriesRouter,
-  mainRoute,
-} = require("./routes");
+const { usersRouter, gamesRouter, categoriesRouter } = require("./routes");
 
 const connectToDatabase = require("./database/connect");
 const cors = require("./middlewares/cors");
@@ -22,8 +17,7 @@ app.use(
   express.static(path.join(__dirname, "public")),
   usersRouter,
   gamesRouter,
-  categoriesRouter,
-  mainRoute
+  categoriesRouter
 );
 
 app.listen(PORT, () => {
