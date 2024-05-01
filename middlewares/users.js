@@ -42,5 +42,20 @@ const createUser = async (req, res, next) => {
   }
 };
 
+// Метод обновления категории
+const updateUser = async (req, res, next) => {
+  console.log("PUT /users");
+  try {
+    // console.log(req.body);
+    req.user = await users.findByIdAndUpdate(req.params.id, req.body);
+    next();
+  } catch (error) {
+    res.setHeader("Content-Type", "application/json");
+    res
+      .status(400)
+      .send(JSON.stringify({ message: "Ошибка обновления пользователя" }));
+  }
+};
+
 // Экспортируем функцию поиска всех категорий
-module.exports = { findAllUsers, findUserById, createUser };
+module.exports = { findAllUsers, findUserById, createUser, updateUser };

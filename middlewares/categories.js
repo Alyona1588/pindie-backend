@@ -40,5 +40,25 @@ const createCategory = async (req, res, next) => {
   }
 };
 
+// Метод обновления категории
+const updateCategory = async (req, res, next) => {
+  console.log("PUT /categories");
+  try {
+    // console.log(req.body);
+    req.category = await categories.findByIdAndUpdate(req.params.id, req.body);
+    next();
+  } catch (error) {
+    res.setHeader("Content-Type", "application/json");
+    res
+      .status(400)
+      .send(JSON.stringify({ message: "Ошибка обновления категории" }));
+  }
+};
+
 // Экспортируем функцию поиска всех категорий
-module.exports = { findAllCategories, findCategoryById, createCategory };
+module.exports = {
+  findAllCategories,
+  findCategoryById,
+  createCategory,
+  updateCategory,
+};

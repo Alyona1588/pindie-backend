@@ -19,5 +19,15 @@ const sendGameCreated = (req, res) => {
   res.end(JSON.stringify(req.game));
 };
 
+const sendGameUpdated = (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.status(200).send(JSON.stringify({ message: "Игра обновлена" }));
+};
+
 // Экспортируем контроллер
-module.exports = { sendAllGames, sendGameById, sendGameCreated };
+module.exports = {
+  sendAllGames,
+  sendGameById,
+  sendGameCreated,
+  sendGameUpdated,
+};

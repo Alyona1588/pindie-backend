@@ -8,11 +8,13 @@ const {
   findAllUsers,
   createUser,
   findUserById,
+  updateUser,
 } = require("../middlewares/users");
 const {
   sendAllUsers,
   sendUserCreated,
   sendUserById,
+  sendUserUpdated,
 } = require("../controllers/users");
 
 // Обрабатываем GET-запрос с роутом '/users'
@@ -23,6 +25,14 @@ usersRouter.get("/users/:id", findUserById, sendUserById);
 
 // Обрабатываем POST-запрос с роутом '/users'
 usersRouter.post("/users", findAllUsers, createUser, sendUserCreated);
+
+usersRouter.put(
+  "/users/:id", // Слушаем запросы по эндпоинту
+  findUserById, // Шаг 1. Находим игру по id из запроса
+  // Шаг 2. Выполняем проверки для корректного обновления (опционально)
+  updateUser, // Шаг 3. Обновляем запись с игрой
+  sendUserUpdated // Шаг 4. Возвращаем на клиент ответ с результатом обновления
+);
 
 // Экспортируем роут для использования в приложении — app.js
 module.exports = usersRouter;
