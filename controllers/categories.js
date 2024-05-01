@@ -6,6 +6,11 @@ const sendAllCategories = (req, res) => {
   res.end(JSON.stringify(req.categoriesArray));
 };
 
+const sendCategoryById = (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.end(JSON.stringify(req.category));
+};
+
 const sendCategoryCreated = (req, res) => {
   // Установим заголовок ответа в формате JSON
   res.setHeader("Content-Type", "application/json");
@@ -15,4 +20,4 @@ const sendCategoryCreated = (req, res) => {
 };
 
 // Экспортируем контроллер
-module.exports = { sendAllCategories, sendCategoryCreated };
+module.exports = { sendAllCategories, sendCategoryById, sendCategoryCreated };

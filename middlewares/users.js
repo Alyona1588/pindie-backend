@@ -13,6 +13,21 @@ const findAllUsers = async (req, res, next) => {
   next();
 };
 
+//Создаем метод поиска пользователя по ID
+const findUserById = async (req, res, next) => {
+  console.log("Запущен метод поиска пользователя по ID (findUserById)");
+  console.log("GET /users/:id");
+  try {
+    req.user = await users.findById(req.params.id);
+    next();
+  } catch (error) {
+    res.setHeader("Content-Type", "application/json");
+    res
+      .status(404)
+      .send(JSON.stringify({ message: "Пользователь не найдена" }));
+  }
+};
+
 const createUser = async (req, res, next) => {
   console.log("POST /users");
   try {
@@ -28,4 +43,4 @@ const createUser = async (req, res, next) => {
 };
 
 // Экспортируем функцию поиска всех категорий
-module.exports = { findAllUsers, createUser };
+module.exports = { findAllUsers, findUserById, createUser };

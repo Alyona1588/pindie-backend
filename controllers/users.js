@@ -6,6 +6,11 @@ const sendAllUsers = (req, res) => {
   res.end(JSON.stringify(req.usersArray));
 };
 
+const sendUserById = (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.end(JSON.stringify(req.user));
+};
+
 const sendUserCreated = (req, res) => {
   // Установим заголовок ответа в формате JSON
   res.setHeader("Content-Type", "application/json");
@@ -15,4 +20,4 @@ const sendUserCreated = (req, res) => {
 };
 
 // Экспортируем контроллер
-module.exports = { sendAllUsers, sendUserCreated };
+module.exports = { sendAllUsers, sendUserById, sendUserCreated };
