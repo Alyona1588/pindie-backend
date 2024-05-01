@@ -24,10 +24,17 @@ const sendUserUpdated = (req, res) => {
   res.status(200).send(JSON.stringify({ message: "Пользователь обновлен" }));
 };
 
+const sendUserDeleted = (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  // Отправляем на клиент найденный и удалённый элемент из базы данных
+  res.end(JSON.stringify(req.user));
+};
+
 // Экспортируем контроллер
 module.exports = {
   sendAllUsers,
   sendUserById,
   sendUserCreated,
   sendUserUpdated,
+  sendUserDeleted,
 };

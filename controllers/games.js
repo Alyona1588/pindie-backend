@@ -24,10 +24,17 @@ const sendGameUpdated = (req, res) => {
   res.status(200).send(JSON.stringify({ message: "Игра обновлена" }));
 };
 
+const sendGameDeleted = (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  // Отправляем на клиент найденный и удалённый элемент из базы данных
+  res.end(JSON.stringify(req.game));
+};
+
 // Экспортируем контроллер
 module.exports = {
   sendAllGames,
   sendGameById,
   sendGameCreated,
   sendGameUpdated,
+  sendGameDeleted,
 };

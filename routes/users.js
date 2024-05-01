@@ -9,12 +9,14 @@ const {
   createUser,
   findUserById,
   updateUser,
+  deleteUser,
 } = require("../middlewares/users");
 const {
   sendAllUsers,
   sendUserCreated,
   sendUserById,
   sendUserUpdated,
+  sendUserDeleted,
 } = require("../controllers/users");
 
 // Обрабатываем GET-запрос с роутом '/users'
@@ -33,6 +35,9 @@ usersRouter.put(
   updateUser, // Шаг 3. Обновляем запись с игрой
   sendUserUpdated // Шаг 4. Возвращаем на клиент ответ с результатом обновления
 );
+
+// Обрабатываем delete-запрос с роутом '/users/:id'
+usersRouter.delete("/users/:id", deleteUser, sendUserDeleted);
 
 // Экспортируем роут для использования в приложении — app.js
 module.exports = usersRouter;

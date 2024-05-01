@@ -9,12 +9,14 @@ const {
   createCategory,
   findCategoryById,
   updateCategory,
+  deleteCategory,
 } = require("../middlewares/categories");
 const {
   sendAllCategories,
   sendCategoryCreated,
   sendCategoryById,
   sendCategoryUpdated,
+  sendCategoryDeleted,
 } = require("../controllers/categories");
 
 // Обрабатываем GET-запрос с роутом '/categories'
@@ -38,6 +40,8 @@ categoriesRouter.put(
   updateCategory, // Шаг 3. Обновляем запись с игрой
   sendCategoryUpdated // Шаг 4. Возвращаем на клиент ответ с результатом обновления
 );
+
+categoriesRouter.delete("/categories/:id", deleteCategory, sendCategoryDeleted);
 
 // Экспортируем роут для использования в приложении — app.js
 module.exports = categoriesRouter;

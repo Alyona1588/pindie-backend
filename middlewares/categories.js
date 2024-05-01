@@ -55,10 +55,28 @@ const updateCategory = async (req, res, next) => {
   }
 };
 
+//Создаем метод удаления категории по ID
+const deleteCategory = async (req, res, next) => {
+  console.log(
+    `Запущен метод удаления категории по ID (deleteCategory): ${req.params.id}`
+  );
+  try {
+    // Методом findByIdAndDelete по id находим и удаляем документ из базы данных
+    req.category = await categories.findByIdAndDelete(req.params.id);
+    next(); // Передаём управление в следующую функцию
+  } catch (error) {
+    res.setHeader("Content-Type", "application/json");
+    res
+      .status(404)
+      .send(JSON.stringify({ message: "Ошибка удаления категории" }));
+  }
+};
+
 // Экспортируем функцию поиска всех категорий
 module.exports = {
   findAllCategories,
   findCategoryById,
   createCategory,
   updateCategory,
+  deleteCategory,
 };
