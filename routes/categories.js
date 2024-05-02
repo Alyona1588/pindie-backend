@@ -10,6 +10,7 @@ const {
   findCategoryById,
   updateCategory,
   deleteCategory,
+  categoryIsNew,
 } = require("../middlewares/categories");
 const {
   sendAllCategories,
@@ -29,6 +30,7 @@ categoriesRouter.get("/categories/:id", findCategoryById, sendCategoryById);
 categoriesRouter.post(
   "/categories",
   findAllCategories,
+  categoryIsNew,
   createCategory,
   sendCategoryCreated
 );
@@ -36,7 +38,7 @@ categoriesRouter.post(
 categoriesRouter.put(
   "/categories/:id", // Слушаем запросы по эндпоинту
   findCategoryById, // Шаг 1. Находим игру по id из запроса
-  // Шаг 2. Выполняем проверки для корректного обновления (опционально)
+  categoryIsNew, // Шаг 2. Выполняем проверки для корректного обновления (опционально)
   updateCategory, // Шаг 3. Обновляем запись с игрой
   sendCategoryUpdated // Шаг 4. Возвращаем на клиент ответ с результатом обновления
 );

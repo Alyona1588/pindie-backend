@@ -17,6 +17,7 @@ const sendCategoryCreated = (req, res) => {
   // Отправим данные в виде JSON-объекта,
   // которые подготовим в миддлваре findAllCategories
   res.end(JSON.stringify(req.category));
+  console.log("Создана запись в БД Коллекции Категроия");
 };
 
 const sendCategoryUpdated = (req, res) => {
@@ -26,8 +27,9 @@ const sendCategoryUpdated = (req, res) => {
 
 const sendCategoryDeleted = (req, res) => {
   res.setHeader("Content-Type", "application/json");
-  res.status(200).send(JSON.stringify({ message: "Пользователь удален" }));
+  res.status(200).send(JSON.stringify({ message: "Категория удалена" }));
 };
+
 // Экспортируем контроллер
 module.exports = {
   sendAllCategories,
