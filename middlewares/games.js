@@ -3,8 +3,8 @@
 // Импортируем модель
 const games = require("../models/game");
 
+// Метод поиска всех игр в БД По GET-запросу на эндпоинт /games
 const findAllGames = async (req, res, next) => {
-  // По GET-запросу на эндпоинт /games найдём все игры
   req.gamesArray = await games
     .find({})
     // По GET-запросу на эндпоинт /games найдём все документы категорий
@@ -24,17 +24,17 @@ const findAllGames = async (req, res, next) => {
       // select: "username",
     });
 
-  console.log("middlewares/games.js");
-  console.log(req.gamesArray);
+  // console.log("middlewares/games.js");
+  // console.log(req.gamesArray);
 
   next();
 };
 
-//Создаем метод поиска игры по ID
+// Метод поиска игры по ID
 const findGameById = async (req, res, next) => {
-  console.log(
-    `Запущен метод поиска игры по ID (findGameById): ${req.params.id}`
-  );
+  // console.log(
+  //   `Запущен метод поиска игры по ID (findGameById): ${req.params.id}`
+  // );
   try {
     // Пробуем найти игру по id
     req.game = await games
@@ -55,7 +55,7 @@ const findGameById = async (req, res, next) => {
 const createGame = async (req, res, next) => {
   console.log("POST /games");
   try {
-    console.log(req.body);
+    // console.log(req.body);
     req.game = await games.create(req.body);
     next();
   } catch (error) {
@@ -77,7 +77,7 @@ const updateGame = async (req, res, next) => {
   }
 };
 
-//Создаем метод удаления игры по ID
+// Метод удаления игры по ID
 const deleteGame = async (req, res, next) => {
   console.log(
     `Запущен метод удаления игры по ID (deleteGame): ${req.params.id}`
@@ -92,6 +92,84 @@ const deleteGame = async (req, res, next) => {
   }
 };
 
+// __________________________ ПРОВЕРКИ___________________________________
+
+//Проверяем наличие полей в теле запроса
+const checkEmptyFields = async (req, res, next) => {
+  if (
+    !req.body.title ||
+    !req.body.description ||
+    !req.body.image ||
+    !req.body.link ||
+    !req.body.developer
+  ) {
+    // Если какое-то из полей отсутствует, то не будем обрабатывать запрос дальше,
+    // а ответим кодом 400 — данные неверны.
+    res.setHeader("Content-Type", "application/json");
+    res.status(400).send(JSON.stringify({ message: "Заполни все поля" }));
+  } else {
+    // Если всё в порядке, то передадим управление следующим миддлварам
+    next();
+  }
+};
+
+// Проверяем наличие жанра у игры
+const checkIfCategoriesAvaliable = async (req, res, next) => {
+  if (!req.body.categories || req.body.categories.length === 0) {
+    res.setHeader("Content-Type", "application/json");
+    res
+      .status(400)
+      .send(JSON.stringify({ message: "Выбери хотя бы одну категорию" }));
+  } else {
+    next();
+  }
+};
+
+// 1. Проверяем, есть ли users в теле запроса
+// 2. // Cверим, на сколько изменился массив пользователей в запросе
+//    // с актуальным значением пользователей в объекте game
+//    // Если больше чем на единицу, вернём статус ошибки 400 с сообщением
+const checkIfUsersAreSafe = async (req, res, next) => {
+  // Проверим, есть ли users в теле запроса
+  if (!req.body.users) {
+    next();
+    return;
+  }
+
+  if (req.body.users.length - 1 === req.game.users.length) {
+    next();
+    return;
+  } else {
+    res.setHeader("Content-Type", "application/json");
+    res.status(400).send(
+      JSON.stringify({
+        message:
+          "Нельзя удалять пользователей или добавлять больше одного пользователя",
+      })
+    );
+  }
+};
+
+// При создании новой игры необходима проверка,
+// существует ли уже такая игра в БД
+const checkIsGameExists = async (req, res, next) => {
+  const isInArray = req.gamesArray.find((game) => {
+    return req.body.name === game.name;
+  });
+  // Если нашли совпадение, то отвечаем кодом 400 и сообщением
+  if (isInArray) {
+    res.setHeader("Content-Type", "application/json");
+    res.status(400).send(
+      JSON.stringify({
+        message: "Игра с таким названием уже существует",
+      })
+    );
+  } else {
+    // Если категория, которую хотим создать, действительно новая, то передаём управление дальше
+    next();
+  }
+};
+
 // Экспортируем методы
 module.exports = {
   findAllGames,
@@ -99,4 +177,8 @@ module.exports = {
   createGame,
   updateGame,
   deleteGame,
+  checkEmptyFields,
+  checkIfCategoriesAvaliable,
+  checkIfUsersAreSafe,
+  checkIsGameExists,
 };

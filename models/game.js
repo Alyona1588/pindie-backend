@@ -14,23 +14,23 @@ const gameSchema = new mongoose.Schema({
     // Поле со строковым значением
     type: String,
     // Явно указываем, что поле обязательно при записи в базу нового документа
-    required: true,
+    //required: true,
   },
   description: {
     type: String,
-    required: true,
+    //  required: true,
   },
   developer: {
     type: String,
-    required: true,
+    //  required: true,
   },
   image: {
     type: String,
-    required: true,
+    //  required: true,
   },
   link: {
     type: String,
-    required: true,
+    //   required: true,
   },
 
   //// Добавляем свойство категории с массивом объектов, в котором укажем
