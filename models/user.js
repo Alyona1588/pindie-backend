@@ -23,6 +23,8 @@ const userSchema = new mongoose.Schema({
 // Добавим метод findUserByCredentials схеме пользователя,
 // у него будет два параметра: почта и пароль
 userSchema.statics.findUserByCredentials = function (email, password) {
+  console.log("Запуск метода userSchema.statics.findUserByCredentials");
+
   // Попытаемся найти пользователя по почте
   return this.findOne({ email }) // this — это модель users
     .then((user) => {

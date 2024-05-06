@@ -1,5 +1,7 @@
 // импорт библиотеки рабты с JWT токенами
 const jwt = require("jsonwebtoken");
+// Импортируем модель
+const users = require("../models/user");
 
 // 1-й пример авторизации через анализ длши и пароль
 //
@@ -42,10 +44,18 @@ const jwt = require("jsonwebtoken");
 //  и возвращает объект юзера или ошибку.
 
 const login = (req, res) => {
+  console.log("Метод login - НАЧАЛО");
+
   const { email, password } = req.body;
+
+  console.log("req.body = ");
+  console.log(req.body);
+
   users
     .findUserByCredentials(email, password)
     .then((user) => {
+      console.log("Линия_________________________________");
+
       //Здесь создана переменную token для хранения токена
       // и запускаешь ее создание метод sign
       //Первый аргумент это данные, которые будут зашифрованы в токене.
@@ -59,14 +69,12 @@ const login = (req, res) => {
         // expiresIn: '7d' // Семь дней
         expiresIn: 3600, // один час, то есть 3600 секунд
       });
-      res
-        .status(200)
-        .send({
-          _id: user._id,
-          username: user.username,
-          email: user.email,
-          jwt: token,
-        });
+      res.status(200).send({
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        jwt: token,
+      });
     })
     .catch((error) => {
       res.status(401).send({ message: error.message });
