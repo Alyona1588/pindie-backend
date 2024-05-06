@@ -19,6 +19,7 @@ const {
   sendGameUpdated,
   sendGameDeleted,
 } = require("../controllers/games");
+const checkAuth = require("../middlewares/auth");
 
 //
 
@@ -38,9 +39,11 @@ gamesRouter.post(
   findAllGames,
   checkEmptyFields, //Проверяем что в теле запроса есть нужные поля
   checkIsGameExists, //// При создании проверяем что с таким имененм уженет в БД
-  findAllGames,
-  createGame,
-  sendGameCreated
+  checkIfCategoriesAvaliable, // Проверяем наличие жанра у игры
+  checkAuth, // Проверяем авторизацию пользователя по наличию JWT-токена
+  findAllGames, // ищем игру
+  createGame, // создаем игру
+  sendGameCreated // отправляем ответ пользователю
 );
 
 //
@@ -55,6 +58,7 @@ gamesRouter.put(
   checkEmptyFields, // Проверяем наличие полей в теле запроса
   checkIfCategoriesAvaliable, // Проверяем наличие жанра у игры
   checkIfUsersAreSafe, // Проверяем, есть ли users в теле запроса и не накручены ли голоса
+  checkAuth, // Проверяем авторизацию пользователя по наличию JWT-токена
   // Шаг 3. Обновляем запись с игрой
   updateGame,
   // Шаг 4. Возвращаем на клиент ответ с результатом обновления
@@ -67,6 +71,7 @@ gamesRouter.put(
 gamesRouter.delete(
   "/games/:id", // Слушаем запросы по эндпоинту
   // Тут будут функция удаления элементов из MongoDB и ответ клиенту
+  checkAuth, // Проверяем авторизацию пользователя по наличию JWT-токена
   deleteGame,
   sendGameDeleted
 );

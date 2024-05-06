@@ -1,11 +1,12 @@
-// Файл middlewares/users.js
-
 // Импортируем модель
 const users = require("../models/user");
 
+// Импортируем bcrypt
+const bcrypt = require("bcryptjs");
+
 const findAllUsers = async (req, res, next) => {
   // По GET-запросу на эндпоинт /users найдём всех пользователей
-  req.usersArray = await users.find({});
+  req.usersArray = await users.find({}, { password: 0 });
 
   //  console.log("middlewares/users.js");
   //  console.log(req.usersArray);
@@ -18,7 +19,7 @@ const findUserById = async (req, res, next) => {
   //  console.log("Запущен метод поиска пользователя по ID (findUserById)");
   //  console.log("GET /users/:id");
   try {
-    req.user = await users.findById(req.params.id);
+    req.user = await users.findById(req.params.id, { password: 0 });
     next();
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
@@ -74,6 +75,21 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
+// Метод ХЕШ-ирования пароля с использованием соли для каждого пользователя
+const hashPassword = async (req, res, next) => {
+  try {
+    // Создаём случайную строку длиной в десять символов
+    const salt = await bcrypt.genSalt(10);
+    // Хешируем пароль
+    const hash = await bcrypt.hash(req.body.password, salt);
+    // Полученный в запросе пароль подменяем на хеш
+    req.body.password = hash;
+    next();
+  } catch (error) {
+    res.status(400).send({ message: "Ошибка хеширования пароля" });
+  }
+};
+
 // __________________________ ПРОВЕРКИ___________________________________
 
 //Проверяем наличие полей username, email и password в теле запроса
@@ -111,4 +127,5 @@ module.exports = {
   deleteUser,
   checkEmptyNameAndEmailAndPassword,
   checkEmptyNameAndEmail,
+  hashPassword,
 };

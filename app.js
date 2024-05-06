@@ -1,10 +1,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
-const { usersRouter, gamesRouter, categoriesRouter } = require("./routes");
+// const { usersRouter, gamesRouter, categoriesRouter } = require("./routes");
 
 const connectToDatabase = require("./database/connect");
 const cors = require("./middlewares/cors");
+const apiRouter = require("./routes/apiRouter");
 
 const app = express();
 const PORT = 3000;
@@ -15,9 +16,13 @@ app.use(
   cors,
   bodyParser.json(),
   express.static(path.join(__dirname, "public")),
-  usersRouter,
-  gamesRouter,
-  categoriesRouter
+  apiRouter // Добавляем
+
+  //, pagesRouter // Непонятно что это
+
+  //  usersRouter,   // Удаляем
+  //  gamesRouter,   // Удаляем
+  //  categoriesRouter // Удаляем
 );
 
 app.listen(PORT, () => {

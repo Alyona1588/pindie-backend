@@ -5,6 +5,15 @@ const games = require("../models/game");
 
 // Метод поиска всех игр в БД По GET-запросу на эндпоинт /games
 const findAllGames = async (req, res, next) => {
+  // Поиск всех игр в проекте по заданной категории
+  if (req.query["categories.name"]) {
+    req.gamesArray = await games.findGameByCategory(
+      req.query["categories.name"]
+    );
+    next();
+    return;
+  }
+  // Поиск всех игр в проекте
   req.gamesArray = await games
     .find({})
     // По GET-запросу на эндпоинт /games найдём все документы категорий

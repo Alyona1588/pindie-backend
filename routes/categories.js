@@ -22,6 +22,8 @@ const {
   sendCategoryDeleted,
 } = require("../controllers/categories");
 
+const checkAuth = require("../middlewares/auth");
+
 // Обрабатываем GET-запрос с роутом '/categories'
 categoriesRouter.get("/categories", findAllCategories, sendAllCategories);
 
@@ -35,6 +37,7 @@ categoriesRouter.post(
   checkEmptyName,
   categoryIsNew,
   //checkIsCategoryExists  //Проверяет что такое название отсутсвует
+  checkAuth, // Проверяем авторизацию пользователя по наличию JWT-токена
   createCategory,
   sendCategoryCreated
 );
@@ -47,12 +50,18 @@ categoriesRouter.put(
   // не работает в пут запросе, т.к. не запрашивается массив с категориями
   // checkIsCategoryExists,
   checkEmptyName,
+  checkAuth, // Проверяем авторизацию пользователя по наличию JWT-токена
   categoryIsNew, // Шаг 2. Выполняем проверки для корректного обновления (опционально)
   updateCategory, // Шаг 3. Обновляем запись с игрой
   sendCategoryUpdated // Шаг 4. Возвращаем на клиент ответ с результатом обновления
 );
 
-categoriesRouter.delete("/categories/:id", deleteCategory, sendCategoryDeleted);
+categoriesRouter.delete(
+  "/categories/:id",
+  checkAuth, // Проверяем авторизацию пользователя по наличию JWT-токена
+  deleteCategory,
+  sendCategoryDeleted
+);
 
 // Экспортируем роут для использования в приложении — app.js
 module.exports = categoriesRouter;

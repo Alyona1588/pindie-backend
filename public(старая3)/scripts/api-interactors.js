@@ -1,10 +1,3 @@
-const getJWTFromCookie = () => {
-  const cookie = document.cookie
-    .split(";")
-    .find(cookie => cookie.trim().startsWith("jwt="));
-  return cookie ? cookie.split("=")[1] : null;
-};
-
 const getData = async url => {
   try {
     const response = await fetch(url);
@@ -16,14 +9,10 @@ const getData = async url => {
 };
 
 const postData = async (url, data) => {
-  const jwt = getJWTFromCookie();
   try {
     const response = await fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: jwt && `Bearer ${jwt}`
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     });
     if (response.status !== 200) {
@@ -36,14 +25,10 @@ const postData = async (url, data) => {
 };
 
 const putData = async (url, data) => {
-  const jwt = getJWTFromCookie();
   try {
     const response = await fetch(url, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: jwt && `Bearer ${jwt}`
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     });
     if (response.status !== 200) {
@@ -56,13 +41,8 @@ const putData = async (url, data) => {
 };
 
 const deleteData = async url => {
-  const jwt = getJWTFromCookie();
   try {
     const response = await fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: jwt && `Bearer ${jwt}`
-      },
       method: "DELETE"
     });
     return response;

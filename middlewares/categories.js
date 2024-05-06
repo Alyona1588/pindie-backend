@@ -20,7 +20,6 @@ const findAllCategories = async (req, res, next) => {
 //response - ответ
 // console.log(request); // Объект запроса
 // console.log(response); // Объект ответа
-
 const findCategoryById = async (req, res, next) => {
   // console.log(
   //   "Запуск middlewares - findCategoryById (метод поиска категории по ID)"
