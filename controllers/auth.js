@@ -69,12 +69,16 @@ const login = (req, res) => {
         // expiresIn: '7d' // Семь дней
         expiresIn: 3600, // один час, то есть 3600 секунд
       });
+      console.log(token);
+
       res.status(200).send({
         _id: user._id,
         username: user.username,
         email: user.email,
         jwt: token,
       });
+      console.log("Вернули на фронт пользователя");
+      //  console.log(res.send());
     })
     .catch((error) => {
       res.status(401).send({ message: error.message });
