@@ -2,6 +2,7 @@
 const jwt = require("jsonwebtoken");
 // Импортируем модель
 const users = require("../models/user");
+const path = require("path");
 
 // 1-й пример авторизации через анализ длши и пароль
 //
@@ -48,13 +49,13 @@ const login = (req, res) => {
 
   const { email, password } = req.body;
 
-  console.log("req.body = ");
+  console.log("Запрос на авторизацию с параметрами req.body = ");
   console.log(req.body);
 
   users
     .findUserByCredentials(email, password)
     .then((user) => {
-      console.log("Линия_________________________________");
+      console.log("Пользователь с параметрами req.body найден в БД");
 
       //Здесь создана переменную token для хранения токена
       // и запускаешь ее создание метод sign
@@ -69,7 +70,8 @@ const login = (req, res) => {
         // expiresIn: '7d' // Семь дней
         expiresIn: 3600, // один час, то есть 3600 секунд
       });
-      console.log(token);
+      //  console.log("Сформирован token = ");
+      //   console.log(token);
 
       res.status(200).send({
         _id: user._id,
@@ -77,13 +79,46 @@ const login = (req, res) => {
         email: user.email,
         jwt: token,
       });
-      console.log("Вернули на фронт пользователя");
+      //  console.log("Вернули на фронт пакет с данными пользователя");
       //  console.log(res.send());
+      // console.log({
+      //   _id: user._id,
+      //   username: user.username,
+      //   email: user.email,
+      //   jwt: token,
+      // });
+      // console.log(req.headers);
     })
     .catch((error) => {
       res.status(401).send({ message: error.message });
     });
 };
 
+const sendIndex = (req, res) => {
+  // Если в Куках есть jwt-токет, то
+  if (req.cookies.jwt) {
+    try {
+      // проеряем токен на актуальность
+      jwt.verify(req.cookies.jwt, "some-secret-key");
+
+      // Если токен актуальный перенаправляем на страницу админки.
+      // Но браузер автоматически не перезагрузит страницу
+      // return res.sendFile(path.join(__dirname, "../public/admin/dashboard.html"));
+      // по этому используем этот код
+      return res.redirect("/admin/dashboard");
+    } catch (err) {
+      // Если токен устарел, то перенаправляем на страницу авторизации
+      res.sendFile(path.join(__dirname, "../public/index.html"));
+    }
+  }
+  //  в случае отсутствия куки или JWT-токена внутри них,
+  //  то перенаправляем на страницу авторизации
+  res.sendFile(path.join(__dirname, "../public/index.html"));
+};
+
+const sendDashboard = (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/admin/dashboard.html"));
+};
+
 // Не забываем экспортирвать функцию
-module.exports = { login };
+module.exports = { login, sendIndex, sendDashboard };

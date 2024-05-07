@@ -22,7 +22,7 @@ const {
   sendCategoryDeleted,
 } = require("../controllers/categories");
 
-const checkAuth = require("../middlewares/auth");
+const { checkAuth } = require("../middlewares/auth");
 
 // Обрабатываем GET-запрос с роутом '/categories'
 categoriesRouter.get("/categories", findAllCategories, sendAllCategories);

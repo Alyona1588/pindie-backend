@@ -23,7 +23,7 @@ const {
   sendMe,
 } = require("../controllers/users");
 
-const checkAuth = require("../middlewares/auth");
+const { checkAuth } = require("../middlewares/auth");
 
 // Обрабатываем GET-запрос с роутом '/users'
 usersRouter.get("/users", findAllUsers, sendAllUsers);

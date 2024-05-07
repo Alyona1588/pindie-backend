@@ -11,6 +11,7 @@ const {
   checkIfCategoriesAvaliable,
   checkIfUsersAreSafe,
   checkIsGameExists,
+  checkIsVoteRequest,
 } = require("../middlewares/games");
 const {
   sendAllGames,
@@ -19,7 +20,8 @@ const {
   sendGameUpdated,
   sendGameDeleted,
 } = require("../controllers/games");
-const checkAuth = require("../middlewares/auth");
+const { checkAuth } = require("../middlewares/auth");
+const cors = require("../middlewares/cors");
 
 //
 
@@ -54,6 +56,7 @@ gamesRouter.put(
   "/games/:id",
   // Шаг 1. Находим игру по id из запроса
   findGameById,
+  checkIsVoteRequest, // Если это запрос на голоосвание, то сокращаем часть проверок
   // Шаг 2. Выполняем проверки для корректного обновления (опционально)
   checkEmptyFields, // Проверяем наличие полей в теле запроса
   checkIfCategoriesAvaliable, // Проверяем наличие жанра у игры

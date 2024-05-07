@@ -3,7 +3,13 @@ const sendAllGames = (req, res) => {
   res.setHeader("Content-Type", "application/json");
   // Отправим данные в виде JSON-объекта,
   // которые подготовим в миддлваре findAllGames
+
+  // console.log("________________________________res.header Это ответ");
+  // console.log(JSON.stringify(res.header));
+  // console.log(res);
+
   res.end(JSON.stringify(req.gamesArray));
+  //
 };
 
 const sendGameById = (req, res) => {

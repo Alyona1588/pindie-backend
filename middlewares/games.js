@@ -5,11 +5,13 @@ const games = require("../models/game");
 
 // Метод поиска всех игр в БД По GET-запросу на эндпоинт /games
 const findAllGames = async (req, res, next) => {
+  console.log("________________________Запрос findAllGames");
   // Поиск всех игр в проекте по заданной категории
   if (req.query["categories.name"]) {
     req.gamesArray = await games.findGameByCategory(
       req.query["categories.name"]
     );
+    // console.log("________________________Запрос findAllGames. категория игры");
     next();
     return;
   }
@@ -101,10 +103,23 @@ const deleteGame = async (req, res, next) => {
   }
 };
 
+//
+const checkIsVoteRequest = async (req, res, next) => {
+  // Если в запросе присылают только поле users
+  if (Object.keys(req.body).length === 1 && req.body.users) {
+    req.isVoteRequest = true;
+  }
+  next();
+};
+
 // __________________________ ПРОВЕРКИ___________________________________
 
 //Проверяем наличие полей в теле запроса
 const checkEmptyFields = async (req, res, next) => {
+  if (req.isVoteRequest) {
+    next();
+    return;
+  }
   if (
     !req.body.title ||
     !req.body.description ||
@@ -124,6 +139,11 @@ const checkEmptyFields = async (req, res, next) => {
 
 // Проверяем наличие жанра у игры
 const checkIfCategoriesAvaliable = async (req, res, next) => {
+  if (req.isVoteRequest) {
+    next();
+    return;
+  }
+
   if (!req.body.categories || req.body.categories.length === 0) {
     res.setHeader("Content-Type", "application/json");
     res
@@ -190,4 +210,5 @@ module.exports = {
   checkIfCategoriesAvaliable,
   checkIfUsersAreSafe,
   checkIsGameExists,
+  checkIsVoteRequest,
 };
