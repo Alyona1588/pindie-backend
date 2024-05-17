@@ -23,11 +23,11 @@ function cors(req, res, next) {
     res.header("Access-Control-Allow-Origin", origin); // Говорим: «Добро пожаловать!»
     // res.header("Access-Control-Allow-Origin", "*"); //Открываем доступ всем
   }
-  res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization"
-  );
+  // res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");
+  // res.header(
+  //   "Access-Control-Allow-Headers",
+  //   "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization"
+  // );
 
   next();
 }
