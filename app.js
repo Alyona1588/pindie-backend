@@ -23,7 +23,6 @@ app.use(
   apiRouter // Добавляем
 
   //, pagesRouter // Непонятно что это
-
   //  usersRouter,   // Удаляем
   //  gamesRouter,   // Удаляем
   //  categoriesRouter // Удаляем
