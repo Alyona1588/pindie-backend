@@ -4,22 +4,18 @@ const checkAuth = (req, res, next) => {
   console.log("___7__Запущен метод проверки авторизации (checkAuth)");
 
   const { authorization } = req.headers;
+  console.log("req.body.users = ");
+  console.log(req.body.users);
 
-  console.log("authorization = ");
-  console.log(authorization);
-
-  console.log("req.headers =");
+  console.log("req.headers");
   console.log(req.headers);
 
   // const rezult = !authorization.startsWith("Bearer ");
   // console.log("rezult = ");
   // console.log(rezult);
-
   // const rezult2 = !authorization;
   // console.log("rezult2 = ");
   // console.log(rezult2);
-
-  // Если заголовок авторизации отсутствует, ил не содержит ("Bearer ")
   if (!authorization || !authorization.startsWith("Bearer ")) {
     return res.status(401).send({ message: "Необходима авторизация" });
   }
@@ -34,13 +30,3 @@ const checkAuth = (req, res, next) => {
 
   next();
 };
-
-const checkCookiesJWT = (req, res, next) => {
-  if (!req.cookies.jwt) {
-    return res.redirect("/");
-  }
-  req.headers.authorization = `Bearer ${req.cookies.jwt}`;
-  next();
-};
-
-module.exports = { checkAuth, checkCookiesJWT };

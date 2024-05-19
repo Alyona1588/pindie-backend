@@ -12,6 +12,7 @@ const {
   checkIfUsersAreSafe,
   checkIsGameExists,
   checkIsVoteRequest,
+  massage,
 } = require("../middlewares/games");
 const {
   sendAllGames,
@@ -54,6 +55,8 @@ gamesRouter.post(
 gamesRouter.put(
   // Слушаем запросы по эндпоинту
   "/games/:id",
+  // Выводим сообщение в консоль о начале работы роута
+  massage,
   // Шаг 1. Находим игру по id из запроса
   findGameById,
   checkIsVoteRequest, // Если это запрос на голоосвание, то сокращаем часть проверок
