@@ -43,9 +43,9 @@ const findAllGames = async (req, res, next) => {
 
 // Метод поиска игры по ID
 const findGameById = async (req, res, next) => {
-  // console.log(
-  //   `Запущен метод поиска игры по ID (findGameById): ${req.params.id}`
-  // );
+  console.log(
+    `____2_Запущен метод поиска игры по ID (findGameById): ${req.params.id}`
+  );
   try {
     // Пробуем найти игру по id
     req.game = await games
@@ -55,6 +55,10 @@ const findGameById = async (req, res, next) => {
         path: "users",
         select: "-password",
       });
+
+    console.log("Найдена игра: ");
+    console.log("req.game =");
+    console.log(req.game);
     next(); // Передаём управление в следующую функцию
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
@@ -77,7 +81,11 @@ const createGame = async (req, res, next) => {
 
 // Метод обновления игры
 const updateGame = async (req, res, next) => {
-  console.log("PUT /games");
+  console.log("___8__Запущен метод Обновления игры (updateGame)");
+
+  // console.log("req.body.users = ");
+  // console.log(req.body.users);
+
   try {
     // console.log(req.body);
     req.game = await games.findByIdAndUpdate(req.params.id, req.body);
@@ -103,10 +111,24 @@ const deleteGame = async (req, res, next) => {
   }
 };
 
-//
+//Проверка что это запрос на голосование
 const checkIsVoteRequest = async (req, res, next) => {
+  console.log("___3__Запущен метод сокращенной проверки  (checkIsVoteRequest)");
+  console.log("req.body.users = ");
+  console.log(req.body.users);
+
+  console.log("req.body.users_permissions_users = ");
+  console.log(req.body.users_permissions_users);
+
+  console.log("req.game.users = ");
+  console.log(req.game.users);
+
+  console.log("req.game.users.length = ");
+  console.log(req.game.users.length);
+
   // Если в запросе присылают только поле users
   if (Object.keys(req.body).length === 1 && req.body.users) {
+    //Пропишем в запрос что это запрос на голосование
     req.isVoteRequest = true;
   }
   next();
@@ -116,6 +138,17 @@ const checkIsVoteRequest = async (req, res, next) => {
 
 //Проверяем наличие полей в теле запроса
 const checkEmptyFields = async (req, res, next) => {
+  console.log(
+    "___4__Запущен метод проверки наличие полей в теле запроса (checkEmptyFields)"
+  );
+  console.log(
+    "Если запрос на голосование ( true), то можно не провярять наличиеследующих полей у игры ( !req.body.title, !req.body.description, !req.body.image, !req.body.link, !req.body.developer) полей у игры req.isVoteRequest = "
+  );
+  console.log(req.isVoteRequest);
+
+  console.log(
+    "Если (falsh), то выполняем проверки полей у игры ( !req.body.title, !req.body.description, !req.body.image, !req.body.link, !req.body.developer)"
+  );
   if (req.isVoteRequest) {
     next();
     return;
@@ -130,7 +163,9 @@ const checkEmptyFields = async (req, res, next) => {
     // Если какое-то из полей отсутствует, то не будем обрабатывать запрос дальше,
     // а ответим кодом 400 — данные неверны.
     res.setHeader("Content-Type", "application/json");
-    res.status(400).send(JSON.stringify({ message: "Заполни все поля" }));
+    res
+      .status(400)
+      .send(JSON.stringify({ message: "Заполни все поля checkEmptyFields" }));
   } else {
     // Если всё в порядке, то передадим управление следующим миддлварам
     next();
@@ -139,10 +174,23 @@ const checkEmptyFields = async (req, res, next) => {
 
 // Проверяем наличие жанра у игры
 const checkIfCategoriesAvaliable = async (req, res, next) => {
+  console.log(
+    "___5__Запущен метод проверки наличие жанра у игры (checkIfCategoriesAvaliable)"
+  );
+  console.log("Это запрос на голоосвнаие req.isVoteRequest = ");
+  console.log(req.isVoteRequest);
+  console.log("Если да то пропускаем проверку");
+
   if (req.isVoteRequest) {
     next();
     return;
   }
+
+  console.log("req.game.categories =");
+  console.log(req.game.categories);
+
+  console.log("req.game.categories.length =");
+  console.log(req.game.categories.length);
 
   if (!req.body.categories || req.body.categories.length === 0) {
     res.setHeader("Content-Type", "application/json");
@@ -160,12 +208,35 @@ const checkIfCategoriesAvaliable = async (req, res, next) => {
 //    // Если больше чем на единицу, вернём статус ошибки 400 с сообщением
 const checkIfUsersAreSafe = async (req, res, next) => {
   // Проверим, есть ли users в теле запроса
+  console.log(
+    "___6__Запущен метод проверки наличие пользователя в теле запроса (checkIfUsersAreSafe)"
+  );
+  console.log(
+    "ПОля с пользователем присуствуют в теле зпроса req.body.users = "
+  );
+  console.log(req.body.users);
+
+  // console.log("req.body.users.length = ххх");
+  // // console.log(req.body.users.length);
+
+  // console.log("req.game.users = ");
+  // console.log(req.game.users);
+
+  // console.log("req.game.users.length = ХХХ");
+  // // console.log(req.game.users.length);
+
   if (!req.body.users) {
+    console.log(
+      "в запросе отсуствуют поля с пользователями !req.body.users - falsh"
+    );
     next();
     return;
   }
 
   if (req.body.users.length - 1 === req.game.users.length) {
+    console.log(
+      "Количество пользователей в запросе больше на 1 - Голоса не накручены"
+    );
     next();
     return;
   } else {
@@ -199,6 +270,18 @@ const checkIsGameExists = async (req, res, next) => {
   }
 };
 
+// СООБЩЕНИЕ В КОНСОЛЬ
+const massage = (req, res, next) => {
+  console.log("____1_Получен PUT запрос на обновление игры");
+  console.log("req.params.id = ");
+  console.log(req.params.id);
+
+  console.log("req. = ");
+  console.log(req);
+
+  next();
+};
+
 // Экспортируем методы
 module.exports = {
   findAllGames,
@@ -211,4 +294,5 @@ module.exports = {
   checkIfUsersAreSafe,
   checkIsGameExists,
   checkIsVoteRequest,
+  massage,
 };

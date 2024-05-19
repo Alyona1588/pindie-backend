@@ -67,8 +67,8 @@ const login = (req, res) => {
         // expiresIn: '120ms' // 120 миллисекунд
         // expiresIn: '15m' // Пятнадцать минут
         // expiresIn: '2h' // Два часа
-        // expiresIn: '7d' // Семь дней
-        expiresIn: 3600, // один час, то есть 3600 секунд
+        expiresIn: "7d", // Семь дней
+        // expiresIn: 3600, // один час, то есть 3600 секунд
       });
       //  console.log("Сформирован token = ");
       //   console.log(token);

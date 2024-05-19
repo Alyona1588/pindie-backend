@@ -26,6 +26,7 @@ const sendGameCreated = (req, res) => {
 };
 
 const sendGameUpdated = (req, res) => {
+  console.log("___9__Запущен метод отправки обновления  (sendGameUpdated)");
   res.setHeader("Content-Type", "application/json");
   res.status(200).send(JSON.stringify({ message: "Игра обновлена" }));
 };

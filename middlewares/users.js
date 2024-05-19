@@ -98,7 +98,13 @@ const checkEmptyNameAndEmailAndPassword = async (req, res, next) => {
     // Если какое-то из полей отсутствует, то не будем обрабатывать запрос дальше,
     // а ответим кодом 400 — данные неверны.
     res.setHeader("Content-Type", "application/json");
-    res.status(400).send(JSON.stringify({ message: "Заполни все поля" }));
+    res
+      .status(400)
+      .send(
+        JSON.stringify({
+          message: "Заполни все поля checkEmptyNameAndEmailAndPassword",
+        })
+      );
   } else {
     // Если всё в порядке, то передадим управление следующим миддлварам
     next();
@@ -111,7 +117,11 @@ const checkEmptyNameAndEmail = async (req, res, next) => {
     // Если какое-то из полей отсутствует, то не будем обрабатывать запрос дальше,
     // а ответим кодом 400 — данные неверны.
     res.setHeader("Content-Type", "application/json");
-    res.status(400).send(JSON.stringify({ message: "Заполни все поля" }));
+    res
+      .status(400)
+      .send(
+        JSON.stringify({ message: "Заполни все поля checkEmptyNameAndEmail" })
+      );
   } else {
     // Если всё в порядке, то передадим управление следующим миддлварам
     next();

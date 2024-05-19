@@ -140,7 +140,12 @@ const checkEmptyName = async (req, res, next) => {
     // Если поле отсутствует, то не будем обрабатывать запрос дальше,
     // а ответим кодом 400 — данные неверны.
     res.setHeader("Content-Type", "application/json");
-    res.status(400).send(JSON.stringify({ message: "Заполни все поля" }));
+    res
+      .status(400)
+      .send(JSON.stringify({ message: "Заполни все поля checkEmptyName" }));
+    console.log(
+      "СООБЩЕНИЕ ________________________ Проверка имени Заполни все поля"
+    );
   } else {
     // Если всё в порядке, то передадим управление следующим миддлварам
     next();
