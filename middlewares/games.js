@@ -187,10 +187,10 @@ const checkIfCategoriesAvaliable = async (req, res, next) => {
   }
 
   console.log("req.game.categories =");
-  console.log(req.game.categories);
+  // console.log(req.game.categories);
 
   console.log("req.game.categories.length =");
-  console.log(req.game.categories.length);
+  //  console.log(req.game.categories.length);
 
   if (!req.body.categories || req.body.categories.length === 0) {
     res.setHeader("Content-Type", "application/json");
@@ -254,7 +254,7 @@ const checkIfUsersAreSafe = async (req, res, next) => {
 // существует ли уже такая игра в БД
 const checkIsGameExists = async (req, res, next) => {
   const isInArray = req.gamesArray.find((game) => {
-    return req.body.name === game.name;
+    return req.body.title === game.title;
   });
   // Если нашли совпадение, то отвечаем кодом 400 и сообщением
   if (isInArray) {
